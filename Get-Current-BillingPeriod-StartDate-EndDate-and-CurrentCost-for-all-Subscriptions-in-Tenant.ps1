@@ -11,6 +11,8 @@ Then it will get the end date for the current billing period.
 And finally it will calculate the current cost for the current billing period.
 All of the above will be displayed per subscription in the tenant.
 
+The script will work with all types of Azure Subscriptions (EA, Pay-as-you-Go, Visual Studio Enterprise, MSDN subscriptions, …), except with CSP subscriptions
+
 .NOTES
 
 Filename:       Get-Current-BillingPeriod-StartDate-EndDate-and-CurrentCost-for-all-Subscriptions-in-Tenant.ps1
