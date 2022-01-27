@@ -1,11 +1,11 @@
 <#
 .SYNOPSIS
 
-A script used to get the start date, the end date and het current cost for all subscriptions in a tenant for the current billing period.
+A script used to get the start date, the end date and het current cost for the current billing period of all subscriptions in a tenant.
 
 .DESCRIPTION
 
-A script used get the start date, the end date and het current cost for all subscriptions in a tenant for the current billing period. 
+A script used to get the start date, the end date and het current cost for the current billing period of all subscriptions in a tenant.
 First of all the script will get the start date for the current billing period.
 Then it will get the end date for the current billing period. 
 And finally it will calculate the current cost for the current billing period.
