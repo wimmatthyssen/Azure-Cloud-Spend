@@ -18,7 +18,7 @@ Created:        26/01/2022
 Last modified:  26/01/2022
 Author:         Wim Matthyssen
 PowerShell:     Azure Cloud Shell or Azure PowerShell
-Version:        Install latest Azure Powershell modules (at least Az version 7.1.0 and Az.Billing version 2.0.0 is required)
+Version:        Install latest Azure PowerShell modules (at least Az version 7.1.0 and Az.Billing version 2.0.0 is required)
 Action:         Change variables were needed to fit your needs. 
 Disclaimer:     This script is provided "As Is" with no warranties.
 
