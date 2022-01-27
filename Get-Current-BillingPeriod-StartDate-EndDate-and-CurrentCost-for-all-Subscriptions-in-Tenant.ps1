@@ -31,7 +31,7 @@ Set-AzContext -tenantID "xxxxxxxx-xxxx-xxxx-xxxxxxxxxxxx" (if not using the defa
 
 .LINK
 
-
+https://wmatthyssen.com/2022/01/27/azure-cloud-spend-get-the-start-date-end-date-and-current-cost-for-the-current-billing-period-of-all-subscriptions-in-a-tenant-with-azure-powershell/
 #>
 
 ## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
