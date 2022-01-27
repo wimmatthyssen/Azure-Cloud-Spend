@@ -1,13 +1,15 @@
 <#
 .SYNOPSIS
 
-A script used to get the start date, the end date and het current cost for all Subccriptions in a Tenant for the current billing period.
+A script used to get the start date, the end date and het current cost for all subscriptions in a tenant for the current billing period.
 
 .DESCRIPTION
 
-A script used get the start date, the end date and het current cost for all Subccriptions in a Tenant for the current billing period. 
-First of all the script will check if PowerShell runs as an Administrator (when not running from Cloud Shell), otherwise the script will be exited as this is required.
-Then it well get the start date, the end date and calculate the current cost for the current biling periond and display it for all Subscriptions in the Tenant.
+A script used get the start date, the end date and het current cost for all subscriptions in a tenant for the current billing period. 
+First of all the script will get the start date for the current biling period.
+Then it well get the end date for the current biling periond. 
+And finally it will calculate the current cost for the current biling periond.
+All of the above will be displayed per subscription in the tenant.
 
 .NOTES
 
@@ -16,12 +18,15 @@ Created:        26/01/2022
 Last modified:  26/01/2022
 Author:         Wim Matthyssen
 PowerShell:     Azure Cloud Shell or Azure PowerShell
-Version:        Install latest Azure Powershell modules (at least Az version 5.9.0 and Az.Network version 4.7.0 is required)
+Version:        Install latest Azure Powershell modules (at least Az version 7.1.0 and Az.Billing version 2.0.0 is required)
 Action:         Change variables were needed to fit your needs. 
 Disclaimer:     This script is provided "As Is" with no warranties.
 
 .EXAMPLE
 
+Connect-AzAccount
+Get-AzTenant (if not using the default tenant)
+Set-AzContext -tenantID "xxxxxxxx-xxxx-xxxx-xxxxxxxxxxxx" (if not using the default tenant)
 .\Get-Current-BillingPeriod-StartDate-EndDate-and-CurrentCost-for-all-Subscriptions-in-Tenant.ps1
 
 .LINK
@@ -41,42 +46,22 @@ $writeSeperatorSpaces = " - "
 
 ## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-## Check if PowerShell runs as Administrator (when not running from Cloud Shell), otherwise exit the script
-
-if ($PSVersionTable.Platform -eq "Unix") {
-    Write-Host ($writeEmptyLine + "# Running in Cloud Shell" + $writeSeperatorSpaces + $currentTime)`
-    -foregroundcolor $foregroundColor1 $writeEmptyLine
-    
-    # Start script execution    
-    Write-Host ($writeEmptyLine + "# Script started" + $writeSeperatorSpaces + $currentTime)`
-    -foregroundcolor $foregroundColor1 $writeEmptyLine 
-} else {
-    $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
-    $isAdministrator = $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-
-        # Check if running as Administrator, otherwise exit the script
-        if ($isAdministrator -eq $false) {
-        Write-Host ($writeEmptyLine + "# Please run PowerShell as Administrator" + $writeSeperatorSpaces + $currentTime)`
-        -foregroundcolor $foregroundColor1 $writeEmptyLine
-        Start-Sleep -s 3
-        exit
-        } else {
-        # If running as Administrator, start script execution    
-        Write-Host ($writeEmptyLine + "# Script started" + $writeSeperatorSpaces + $currentTime)`
-        -foregroundcolor $foregroundColor1 $writeEmptyLine 
-        }
-}
-
-## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 ## Suppress breaking change warning messages
 
 Set-Item Env:\SuppressAzurePowerShellBreakingChangeWarnings "true"
 
 ## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+## Start script execution
+
+Write-Host ($writeEmptyLine + "# Script started. Depending on the amount of subscriptions, it will need around 1 - 2  minute(s) to complete" + $writeSeperatorSpaces + $currentTime)`
+-foregroundcolor $foregroundColor1 $writeEmptyLine 
+ 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 ## Get start date, end date and current cost
 
+# Loop trough all subscriptions in tenant and run commands
 $subscriptions = Get-AzSubscription
 foreach ($sub in $subscriptions)
 {
@@ -97,7 +82,7 @@ foreach ($sub in $subscriptions)
     # Get current cost
     try 
     {
-        $found =Get-AzConsumptionUsageDetail -StartDate $startDate -EndDate $endDate -ea 0
+        $found = Get-AzConsumptionUsageDetail -StartDate $startDate -EndDate $endDate -ea 0
     
         if ($found.PretaxCost){
             $currentCost = $found | Measure-Object -Property PretaxCost -Sum
@@ -120,10 +105,3 @@ Write-Host ($writeEmptyLine + "# Script completed" + $writeSeperatorSpaces + $cu
 -foregroundcolor $foregroundColor1 $writeEmptyLine 
 
 ## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
